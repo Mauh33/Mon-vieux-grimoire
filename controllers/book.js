@@ -64,52 +64,6 @@ exports.modifyBook = (req, res, next) => {
     });
 };
 
-/* exports.modifyRating = (req, res, next) => {
-  Book.findOne({ _id: req.params.id })
-    .then(async book => {
-      const user = req.body.userId;
-
-      if (user !== req.auth.userId) {
-        return res
-          .status(403)
-          .json({ error: "Vous ne pouvez pas voter pour ce livre." });
-      }
-
-      const newRatingObject = {
-        userId: req.auth.userId,
-        grade: req.body.rating,
-      };
-
-      if (book.ratings.some(rating => rating.userId === req.auth.userId)) {
-        return res
-          .status(403)
-          .json({ error: "Vous avez déjà voté pour ce livre." });
-      }
-
-      book.ratings.push(newRatingObject);
-      const allRatings = book.ratings.map(rating => rating.grade);
-      const newAverageRating = (
-        allRatings.reduce((acc, curr) => acc + curr, 0) / allRatings.length
-      ).toFixed(1);
-
-      try {
-        await Book.updateOne(
-          { _id: req.params.id },
-          { ratings: book.ratings, averageRating: newAverageRating },
-          { new: true }
-        );
-
-        const updatedBook = await Book.findOne({ _id: req.params.id });
-        return res.status(200).json(updatedBook);
-      } catch (error) {
-        throw error;
-      }
-    })
-    .catch(error => {
-      return res.status(500).json({ error });
-    });
-}; */
-
 exports.modifyRating = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
     .then(async book => {
@@ -204,7 +158,6 @@ exports.getBestRating = (req, res, next) => {
     { $unwind: "$averageRating" },
     { $sort: { averageRating: -1 } },
     { $limit: 3 },
-    // { $project: { title: "$title", imageUrl: "$imageUrl" , author: "$author",  } },
   ])
     .then(books => {
       res.status(200).json(books);

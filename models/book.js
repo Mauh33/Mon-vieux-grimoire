@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
 const booksSchema = mongoose.Schema({
-  title: { type: String, require: true, unique: true },
+  userId: { type: String, required: true },
+  title: { type: String, required: true, unique: true },
   author: { type: String },
-  imageUrl: { type: String, require: true },
+  imageUrl: { type: String, required: true },
   year: { type: Number },
   genre: { type: String },
   ratings: [
